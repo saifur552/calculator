@@ -1,0 +1,65 @@
+Certainly! Here’s a breakdown of how each JavaScript function in this calculator works:
+
+javascript
+Copy code
+const display = document.getElementById('display');
+This line selects the calculator’s display input box using getElementById.
+    The display variable is used throughout the script to show numbers, operators, and results.
+    Function: appendNumber(number)
+javascript
+Copy code
+function appendNumber(number) {
+    display.value += number;
+}
+This function appends a number to the current value in the display.
+When you click a number button, it calls appendNumber with that number.The += operator means it will add to the existing display.value rather than replacing it.
+    Example: If the display shows 4 and you click 5, it becomes 45.
+
+Function: appendOperator(operator)
+javascript
+Copy code
+function appendOperator(operator) {
+    const lastChar = display.value.slice(-1);
+    // Avoid multiple operators in a row
+    if (lastChar === '+' || lastChar === '-' || lastChar === '*' || lastChar === '/') {
+        display.value = display.value.slice(0, -1) + operator;
+    } else {
+        display.value += operator;
+    }
+}
+This function is called when an operator button(+, -, *, /) is clicked.
+const lastChar = display.value.slice(-1); gets the last character currently in the display to check if it’s an operator.
+Check for multiple operators: If the last character is already an operator, it replaces it with the new one to prevent accidental operator stacking like++ or + -.
+If the last character isn’t an operator, it appends the operator as expected.
+    Function: clearDisplay()
+javascript
+Copy code
+function clearDisplay() {
+    display.value = '';
+}
+This function clears the entire display, setting it back to an empty string.
+This is used when clicking the “C” button, which resets the calculator.
+    Function: deleteLast()
+javascript
+Copy code
+function deleteLast() {
+    display.value = display.value.slice(0, -1);
+}
+deleteLast() removes the last character from the display.
+    slice(0, -1) takes everything in display.value from the start up to, but not including, the last character.This is called when you press the "DEL" button.
+        Example: If the display shows 45, calling deleteLast() changes it to 4.
+
+Function: calculateResult()
+javascript
+Copy code
+function calculateResult() {
+    try {
+        display.value = eval(display.value);
+    } catch (error) {
+        display.value = 'Error';
+    }
+}
+This function calculates the result of the expression shown on the display when you press the = button.
+    eval(): This function evaluates the mathematical expression in display.value and returns the result.For example, if display.value is 2 + 3 * 5, eval returns 17.
+Error handling: If there’s an error(such as dividing by zero or an incomplete expression), catch sets the display to Error.
+Important Note: eval() can be a security risk if used with untrusted input, as it can execute arbitrary code.In this context, where input is limited to numbers and operators, it’s acceptable, but other implementations should avoid eval for safety.
